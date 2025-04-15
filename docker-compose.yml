@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  postal:
+    image: postalhq/postal:latest
+    container_name: postal
+    restart: always
+    ports:
+      - "8080:5000"
+      - "25:25"
+    environment:
+      - POSTAL_SMTP_SERVER=smtp.1001.tattoo
+      - POSTAL_HOSTNAME=smtp.1001.tattoo
+    volumes:
+      - postal-data:/opt/postal/config
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER=postal
+      POSTGRES_PASSWORD=1234567890
+      POSTGRES_DB=postal
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER=postal
+      RABBITMQ_DEFAULT_PASS=1234567890
+
+volumes:
+  postal-data:
+  pgdata:
