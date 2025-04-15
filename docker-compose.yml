@@ -7,7 +7,7 @@ services:
     restart: always
     ports:
       - "8080:5000"
-      - "25:25"
+      - "2525:25"
     environment:
       - POSTAL_SMTP_SERVER=smtp.1001.tattoo
       - POSTAL_HOSTNAME=smtp.1001.tattoo
