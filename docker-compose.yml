@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postal:
-    image: postalhq/postal:latest
+    image: ghcr.io/postalserver/postal:latest
     container_name: postal
     restart: always
     ports:
