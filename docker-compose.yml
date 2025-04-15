@@ -11,22 +11,26 @@ services:
     environment:
       - POSTAL_SMTP_SERVER=smtp.1001.tattoo
       - POSTAL_HOSTNAME=smtp.1001.tattoo
+      - DB_HOST=mysql
+      - DB_USERNAME=postal
+      - DB_PASSWORD=1234567890
+      - DB_DATABASE=postal
     volumes:
       - postal-data:/opt/postal/config
     depends_on:
-      - postgres
+      - mysql
       - rabbitmq
-    command: ["postal", "web-server"]
 
-  postgres:
-    image: postgres:13
+  mysql:
+    image: mysql:5.7
     restart: always
     environment:
-      POSTGRES_USER=postal
-      POSTGRES_PASSWORD=1234567890
-      POSTGRES_DB=postal
+      MYSQL_ROOT_PASSWORD=1234567890
+      MYSQL_DATABASE=postal
+      MYSQL_USER=postal
+      MYSQL_PASSWORD=1234567890
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mysqldata:/var/lib/mysql
 
   rabbitmq:
     image: rabbitmq:3
@@ -37,5 +41,6 @@ services:
 
 volumes:
   postal-data:
-  pgdata:
+  mysqldata:
+
 
