@@ -6,7 +6,7 @@ services:
     container_name: postal
     restart: always
     ports:
-      - "8080:5000"
+      - "18080:5000"
       - "10025:25"
     environment:
       - POSTAL_SMTP_SERVER=smtp.1001.tattoo
