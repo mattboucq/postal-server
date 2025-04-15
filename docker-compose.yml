@@ -16,6 +16,7 @@ services:
     depends_on:
       - postgres
       - rabbitmq
+    command: ["postal", "web-server"]
 
   postgres:
     image: postgres:13
@@ -37,3 +38,4 @@ services:
 volumes:
   postal-data:
   pgdata:
+
