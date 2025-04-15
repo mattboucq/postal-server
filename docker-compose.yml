@@ -1,34 +1,14 @@
 version: '3'
 
 services:
-  postal:
-    image: ghcr.io/postalserver/postal:latest
-    container_name: postal
-    restart: always
-    ports:
-      - "18080:5000"
-      - "10025:25"
-    environment:
-      - POSTAL_SMTP_SERVER=smtp.1001.tattoo
-      - POSTAL_HOSTNAME=smtp.1001.tattoo
-      - DB_HOST=mysql
-      - DB_USERNAME=postal
-      - DB_PASSWORD=1234567890
-      - DB_DATABASE=postal
-    volumes:
-      - postal-data:/opt/postal/config
-    depends_on:
-      - mysql
-      - rabbitmq
-
   mysql:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD=1234567890
-      MYSQL_DATABASE=postal
-      MYSQL_USER=postal
-      MYSQL_PASSWORD=1234567890
+      MYSQL_ROOT_PASSWORD: 1234567890
+      MYSQL_DATABASE: postal
+      MYSQL_USER: postal
+      MYSQL_PASSWORD: 1234567890
     volumes:
       - mysqldata:/var/lib/mysql
 
@@ -36,8 +16,31 @@ services:
     image: rabbitmq:3
     restart: always
     environment:
-      RABBITMQ_DEFAULT_USER=postal
-      RABBITMQ_DEFAULT_PASS=1234567890
+      RABBITMQ_DEFAULT_USER: postal
+      RABBITMQ_DEFAULT_PASS: 1234567890
+
+  postal:
+    image: ghcr.io/postalserver/postal:latest
+    container_name: postal
+    restart: always
+    depends_on:
+      - mysql
+      - rabbitmq
+    environment:
+      - POSTAL_DB_HOST=mysql
+      - POSTAL_DB_USERNAME=postal
+      - POSTAL_DB_PASSWORD=1234567890
+      - POSTAL_DB_DATABASE=postal
+      - POSTAL_RABBITMQ_HOST=rabbitmq
+      - POSTAL_RABBITMQ_USERNAME=postal
+      - POSTAL_RABBITMQ_PASSWORD=1234567890
+      - POSTAL_SMTP_SERVER=smtp.1001.tattoo
+      - POSTAL_HOSTNAME=smtp.1001.tattoo
+    ports:
+      - "18080:5000"
+      - "10025:25"
+    volumes:
+      - postal-data:/opt/postal/config
 
 volumes:
   postal-data:
